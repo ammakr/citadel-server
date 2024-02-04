@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
+from django.utils.text import slugify
 
 
 class UserAccountManager(BaseUserManager):
@@ -17,6 +18,15 @@ class UserAccountManager(BaseUserManager):
         user = self.model(email=email, **kwargs)
 
         user.set_password(password)
+
+        # Generate a unique username based on first and last names
+        base_username = slugify(f"{user.first_name} {user.last_name}")
+        user.username = base_username
+        i = 1
+        while self.model.objects.filter(username=user.username).exists():
+            user.username = f"{base_username}-{i}"
+            i += 1
+
         user.save(using=self._db)
 
         return user
@@ -35,6 +45,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
+    username = models.CharField(max_length=255, unique=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

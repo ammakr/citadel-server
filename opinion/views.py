@@ -9,6 +9,7 @@ from .serializers import OpinionSerializer
 class OpinionListCreateView(ModelViewSet):
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
+    lookup_field = "slug"
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:
