@@ -1,9 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import permissions
+from rest_framework import permissions, status
 
 from opinion.permissions import IsOwner
 from .models import Opinion
 from .serializers import OpinionSerializer
+
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 class OpinionListCreateView(ModelViewSet):
@@ -24,3 +27,9 @@ class OpinionListCreateView(ModelViewSet):
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+
+    @action(detail=False, url_path="@(?P<username>[\w.@+-]+)")
+    def by_user(self, request, username=None):
+        user_opinions = Opinion.objects.filter(user__username=username)
+        serializer = self.get_serializer(user_opinions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

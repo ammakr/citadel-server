@@ -1,5 +1,6 @@
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
 from .models import UserAccount
+from django.utils.text import slugify
 
 
 class CustomUserSerializer(UserSerializer):
@@ -12,6 +13,6 @@ class CustomUserSerializer(UserSerializer):
             "first_name",
             "last_name",
             "is_active",
-            "is_staff",
-            "is_superuser",
+            # "is_staff",
+            # "is_superuser",
         )
