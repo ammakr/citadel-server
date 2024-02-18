@@ -12,4 +12,3 @@ class UserAdmin(admin.ModelAdmin):
             "last_name",
             "is_active",
     ]
-    
