@@ -15,7 +15,7 @@ SECRET_KEY = getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 DEBUG = getenv("DEBUG", "False") == "True"
 
-TIME_ZONE = 'Asia/Karachi'
+TIME_ZONE = "Asia/Karachi"
 
 ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
@@ -56,7 +56,7 @@ ROOT_URLCONF = "citadel.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
