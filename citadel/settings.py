@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "social_django",
     "vault",
     "opinion",
+    "tags",
 ]
 
 MIDDLEWARE = [
