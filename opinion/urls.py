@@ -4,7 +4,7 @@ from .views import OpinionListCreateView
 
 # Create a router and register our viewset with it.
 router = DefaultRouter()
-router.register(r"", OpinionListCreateView, basename="yourmodel")
+router.register(r"", OpinionListCreateView, basename="opinions")
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

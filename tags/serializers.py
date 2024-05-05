@@ -13,3 +13,10 @@ class TagSerializer(serializers.ModelSerializer):
         children = obj.parent_category.all()
         serializer = TagSerializer(children, many=True)
         return serializer.data
+
+
+class AllTagsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ["id", "name"]
+        read_only_fields = ["id", "name"]
