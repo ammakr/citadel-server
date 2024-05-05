@@ -6,6 +6,7 @@ class SimpleTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "slug"]
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -14,6 +15,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "children", "slug"]
+        read_only_fields = ["id", "name", "slug"]
 
     def get_children(self, obj):
         children = obj.parent_tag.all()

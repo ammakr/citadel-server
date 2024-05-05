@@ -20,7 +20,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class OpinionSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    tag = SimpleTagSerializer()
+    tag = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), write_only=True
+    )
+    topic = serializers.SerializerMethodField()
 
     class Meta:
         model = Opinion
@@ -34,10 +37,22 @@ class OpinionSerializer(serializers.ModelSerializer):
             "updated_at",
             "user",
             "tag",
+            "topic",
         )
         read_only_fields = [
             "slug",
         ]
+
+    def get_topic(self, opinion):
+        if self.context["request"].method == "GET":
+            tag = opinion.tag
+            if tag:
+                return {
+                    "id": tag.id,
+                    "name": tag.name,
+                    "slug": tag.slug,
+                }
+            return None
 
     def create(self, validated_data):
         title = validated_data["title"]
