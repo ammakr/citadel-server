@@ -8,8 +8,9 @@ class Tag(models.Model):
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="parent_category",
+        related_name="parent_tag",
     )
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name

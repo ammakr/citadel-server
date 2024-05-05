@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.utils.text import slugify
 from tags.models import Tag
+from tags.serializers import SimpleTagSerializer, TagSerializer
 
 from vault.models import UserAccount
 from .models import Opinion
@@ -19,10 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class OpinionSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    category = serializers.SerializerMethodField()
-    tag = serializers.PrimaryKeyRelatedField(
-        write_only=True, queryset=Tag.objects.all()
-    )
+    tag = SimpleTagSerializer()
 
     class Meta:
         model = Opinion
@@ -36,12 +34,10 @@ class OpinionSerializer(serializers.ModelSerializer):
             "updated_at",
             "user",
             "tag",
-            "category",
         )
-        read_only_fields = ["slug", "category"]
-
-    def get_category(self, opinion):
-        return opinion.tag.name if opinion.tag else None
+        read_only_fields = [
+            "slug",
+        ]
 
     def create(self, validated_data):
         title = validated_data["title"]

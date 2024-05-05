@@ -2,15 +2,21 @@ from rest_framework import serializers
 from .models import Tag
 
 
+class SimpleTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ["id", "name", "slug"]
+
+
 class TagSerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField()
 
     class Meta:
         model = Tag
-        fields = ["id", "name", "children"]
+        fields = ["id", "name", "children", "slug"]
 
     def get_children(self, obj):
-        children = obj.parent_category.all()
+        children = obj.parent_tag.all()
         serializer = TagSerializer(children, many=True)
         return serializer.data
 
@@ -18,5 +24,5 @@ class TagSerializer(serializers.ModelSerializer):
 class AllTagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ["id", "name"]
-        read_only_fields = ["id", "name"]
+        fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "name", "slug"]
