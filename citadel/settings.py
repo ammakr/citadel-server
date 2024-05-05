@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "social_django",
     "vault",
     "opinion",
+    "tags",
 ]
 
 MIDDLEWARE = [
@@ -53,7 +54,7 @@ ROOT_URLCONF = "citadel.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -168,4 +169,4 @@ DEFAULT_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
 
 # site details for email sending
 DOMAIN = getenv("DOMAIN")
-SITE_NAME = "Citadel"
+SITE_NAME = "citadel"

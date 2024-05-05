@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.utils.text import slugify
 
 from vault.models import UserAccount
 from .models import Opinion
@@ -16,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class OpinionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Opinion
@@ -30,3 +31,15 @@ class OpinionSerializer(serializers.ModelSerializer):
             "updated_at",
             "user",
         )
+        read_only_fields = ["slug"]
+
+    def create(self, validated_data):
+        title = validated_data["title"]
+        base_slug = slugify(title)
+        slug = base_slug
+        count = 1
+        while Opinion.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{count}"
+            count += 1
+        validated_data["slug"] = slug
+        return super().create(validated_data)
